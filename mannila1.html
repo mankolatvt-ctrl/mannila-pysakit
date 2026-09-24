@@ -1,473 +1,406 @@
-<!DOCTYPE html>                                                                                                                                                                                                                                                   
-<html lang="fi">                                                                                                                                                                                                                                                  
-<head>                                                                                                                                                                                                                                                            
-<meta charset="UTF-8">                                                                                                                                                                                                                                            
-<meta name="viewport" content="width=1345, height=979, initial-scale=1, maximum-scale=1, user-scalable=no">                                                                                                                                                                                                      
-<title>Mannila 1 – Bussit</title>                                                                                                                                                                                                                                
-<style type="text/css">                                                                                                                                                                                                                                           
-  * { box-sizing: border-box; }                                                                                                                                                                                                                                   
-  html, body {                                                                                                                                                                                                                                                     
-    margin: 0;                                                                                                                                                                                                                                                     
-    padding: 0;                                                                                                                                                                                                                                                    
-    width: 100%;                                                                                                                                                                                                                                                   
-    height: 100%;                                                                                                                                                                                                                                                  
-    background-color: #cfe8d6;                                                                                                                                                                                                                                     
-    overflow: hidden;                                                                                                                                                                                                                                              
-    font-family: Arial, Helvetica, sans-serif;                                                                                                                                                                                                                     
-  }                                                                                                                                                                                                                                                                
-  #stage {                                                                                                                                                                                                                                                         
-    width: 1920px;                                                                                                                                                                                                                                                 
-    height: 1080px;                                                                                                                                                                                                                                                
-    background-color: #eaf6ee;                                                                                                                                                                                                                                     
-    display: -webkit-box;                                                                                                                                                                                                                                          
-    display: -webkit-flex;                                                                                                                                                                                                                                         
-    display: flex;                                                                                                                                                                                                                                                 
-    -webkit-box-orient: vertical;                                                                                                                                                                                                                                  
-    -webkit-flex-direction: column;                                                                                                                                                                                                                                
-    flex-direction: column;                                                                                                                                                                                                                                        
-    overflow: hidden;                                                                                                                                                                                                                                              
-  }                                                                                                                                                                                                                                                                
-  header {                                                                                                                                                                                                                                                         
-    height: 190px;                                                                                                                                                                                                                                                 
-    background-color: #1e8e3e;                                                                                                                                                                                                                                     
-    color: #ffffff;                                                                                                                                                                                                                                                
-    display: -webkit-box;                                                                                                                                                                                                                                          
-    display: -webkit-flex;                                                                                                                                                                                                                                         
-    display: flex;                                                                                                                                                                                                                                                 
-    -webkit-box-align: center;                                                                                                                                                                                                                                     
-    -webkit-align-items: center;                                                                                                                                                                                                                                   
-    align-items: center;                                                                                                                                                                                                                                           
-    -webkit-box-pack: justify;                                                                                                                                                                                                                                     
-    -webkit-justify-content: space-between;                                                                                                                                                                                                                        
-    justify-content: space-between;                                                                                                                                                                                                                                
-    padding: 0 64px;                                                                                                                                                                                                                                               
-  }                                                                                                                                                                                                                                                                
-  .brand {                                                                                                                                                                                                                                                         
-    display: -webkit-box;                                                                                                                                                                                                                                          
-    display: -webkit-flex;                                                                                                                                                                                                                                         
-    display: flex;                                                                                                                                                                                                                                                 
-    -webkit-box-align: center;                                                                                                                                                                                                                                     
-    -webkit-align-items: center;                                                                                                                                                                                                                                   
-    align-items: center;                                                                                                                                                                                                                                           
-  }                                                                                                                                                                                                                                                                
-  .bus-icon-wrap {                                                                                                                                                                                                                                                 
-    width: 84px;                                                                                                                                                                                                                                                   
-    height: 84px;                                                                                                                                                                                                                                                  
-    margin-right: 28px;                                                                                                                                                                                                                                            
-    -webkit-box-flex: 0;                                                                                                                                                                                                                                           
-    -webkit-flex-shrink: 0;                                                                                                                                                                                                                                        
-    flex-shrink: 0;                                                                                                                                                                                                                                                
-  }                                                                                                                                                                                                                                                                
-  .brand-text h1 {                                                                                                                                                                                                                                                 
-    margin: 0;                                                                                                                                                                                                                                                     
-    font-size: 56px;                                                                                                                                                                                                                                               
-    font-weight: bold;                                                                                                                                                                                                                                             
-  }                                                                                                                                                                                                                                                                
-  .brand-text p {                                                                                                                                                                                                                                                  
-    margin: 4px 0 0 0;                                                                                                                                                                                                                                             
-    font-size: 22px;                                                                                                                                                                                                                                               
-    font-weight: normal;                                                                                                                                                                                                                                           
-    color: #d7f0dd;                                                                                                                                                                                                                                                
-  }                                                                                                                                                                                                                                                                
-  .clock-block {                                                                                                                                                                                                                                                   
-    text-align: right;                                                                                                                                                                                                                                             
-  }                                                                                                                                                                                                                                                                
-  #clock {                                                                                                                                                                                                                                                         
-    font-size: 60px;                                                                                                                                                                                                                                               
-    font-weight: bold;                                                                                                                                                                                                                                             
-    line-height: 1;                                                                                                                                                                                                                                                
-  }                                                                                                                                                                                                                                                                
-  #date {                                                                                                                                                                                                                                                          
-    margin-top: 6px;                                                                                                                                                                                                                                               
-    font-size: 20px;                                                                                                                                                                                                                                               
-    color: #d7f0dd;                                                                                                                                                                                                                                                
-  }                                                                                                                                                                                                                                                                
-  main {                                                                                                                                                                                                                                                           
-    -webkit-box-flex: 1;                                                                                                                                                                                                                                           
-    -webkit-flex: 1;                                                                                                                                                                                                                                               
-    flex: 1;                                                                                                                                                                                                                                                       
-    padding: 36px 64px 24px 64px;                                                                                                                                                                                                                                  
-    display: -webkit-box;                                                                                                                                                                                                                                          
-    display: -webkit-flex;                                                                                                                                                                                                                                         
-    display: flex;                                                                                                                                                                                                                                                 
-    -webkit-box-orient: vertical;                                                                                                                                                                                                                                  
-    -webkit-flex-direction: column;                                                                                                                                                                                                                                
-    flex-direction: column;                                                                                                                                                                                                                                        
-    min-height: 0;                                                                                                                                                                                                                                                 
-  }                                                                                                                                                                                                                                                                
-  #list {                                                                                                                                                                                                                                                          
-    -webkit-box-flex: 1;                                                                                                                                                                                                                                           
-    -webkit-flex: 1;                                                                                                                                                                                                                                               
-    flex: 1;                                                                                                                                                                                                                                                       
-    display: -webkit-box;                                                                                                                                                                                                                                          
-    display: -webkit-flex;                                                                                                                                                                                                                                         
-    display: flex;                                                                                                                                                                                                                                                 
-    -webkit-box-orient: vertical;                                                                                                                                                                                                                                  
-    -webkit-flex-direction: column;                                                                                                                                                                                                                                
-    flex-direction: column;                                                                                                                                                                                                                                        
-    min-height: 0;                                                                                                                                                                                                                                                 
-  }                                                                                                                                                                                                                                                                
-  .row {                                                                                                                                                                                                                                                           
-    -webkit-box-flex: 1;                                                                                                                                                                                                                                           
-    -webkit-flex: 1;                                                                                                                                                                                                                                               
-    flex: 1;                                                                                                                                                                                                                                                       
-    min-height: 0;                                                                                                                                                                                                                                                 
-    margin-bottom: 16px;                                                                                                                                                                                                                                           
-    background-color: #ffffff;                                                                                                                                                                                                                                     
-    border-radius: 20px;                                                                                                                                                                                                                                           
-    padding: 0 40px;                                                                                                                                                                                                                                               
-    display: -webkit-box;                                                                                                                                                                                                                                          
-    display: -webkit-flex;                                                                                                                                                                                                                                         
-    display: flex;                                                                                                                                                                                                                                                 
-    -webkit-box-align: center;                                                                                                                                                                                                                                     
-    -webkit-align-items: center;                                                                                                                                                                                                                                   
-    align-items: center;                                                                                                                                                                                                                                           
-  }                                                                                                                                                                                                                                                                
-  .row\:last-child { margin-bottom: 0; }                                                                                                                                                                                                                           
-  .badge {                                                                                                                                                                                                                                                         
-    width: 92px;                                                                                                                                                                                                                                                   
-    height: 92px;                                                                                                                                                                                                                                                  
-    border-radius: 50%;                                                                                                                                                                                                                                            
-    background-color: #1e8e3e;                                                                                                                                                                                                                                     
-    color: #ffffff;                                                                                                                                                                                                                                                
-    display: -webkit-box;                                                                                                                                                                                                                                          
-    display: -webkit-flex;                                                                                                                                                                                                                                         
-    display: flex;                                                                                                                                                                                                                                                 
-    -webkit-box-align: center;                                                                                                                                                                                                                                     
-    -webkit-align-items: center;                                                                                                                                                                                                                                   
-    align-items: center;                                                                                                                                                                                                                                           
-    -webkit-box-pack: center;                                                                                                                                                                                                                                      
-    -webkit-justify-content: center;                                                                                                                                                                                                                               
-    justify-content: center;                                                                                                                                                                                                                                       
-    font-size: 32px;                                                                                                                                                                                                                                               
-    font-weight: bold;                                                                                                                                                                                                                                             
-    margin-right: 30px;                                                                                                                                                                                                                                            
-    -webkit-box-flex: 0;                                                                                                                                                                                                                                           
-    -webkit-flex-shrink: 0;                                                                                                                                                                                                                                        
-    flex-shrink: 0;                                                                                                                                                                                                                                                
-  }                                                                                                                                                                                                                                                                
-  .row\.soon .badge { background-color: #e2622a; }                                                                                                                                                                                                                 
-  .dest {                                                                                                                                                                                                                                                          
-    -webkit-box-flex: 1;                                                                                                                                                                                                                                           
-    -webkit-flex: 1;                                                                                                                                                                                                                                               
-    flex: 1;                                                                                                                                                                                                                                                       
-    font-size: 40px;                                                                                                                                                                                                                                               
-    font-weight: bold;                                                                                                                                                                                                                                             
-    color: #1c2b22;                                                                                                                                                                                                                                                
-    white-space: nowrap;                                                                                                                                                                                                                                           
-    overflow: hidden;                                                                                                                                                                                                                                              
-    text-overflow: ellipsis;                                                                                                                                                                                                                                       
-    margin-right: 20px;                                                                                                                                                                                                                                            
-  }                                                                                                                                                                                                                                                                
-  .dest .sub {                                                                                                                                                                                                                                                     
-    display: block;                                                                                                                                                                                                                                                
-    font-size: 20px;                                                                                                                                                                                                                                               
-    font-weight: normal;                                                                                                                                                                                                                                           
-    color: #6b7d72;                                                                                                                                                                                                                                                
-    margin-top: 4px;                                                                                                                                                                                                                                               
-  }                                                                                                                                                                                                                                                                
-  .clocktime {                                                                                                                                                                                                                                                     
-    width: 150px;                                                                                                                                                                                                                                                  
-    text-align: right;                                                                                                                                                                                                                                             
-    font-size: 34px;                                                                                                                                                                                                                                               
-    color: #6b7d72;                                                                                                                                                                                                                                                
-    margin-right: 20px;                                                                                                                                                                                                                                            
-    -webkit-box-flex: 0;                                                                                                                                                                                                                                           
-    -webkit-flex-shrink: 0;                                                                                                                                                                                                                                        
-    flex-shrink: 0;                                                                                                                                                                                                                                                
-  }                                                                                                                                                                                                                                                                
-  .mins {                                                                                                                                                                                                                                                          
-    width: 190px;                                                                                                                                                                                                                                                  
-    text-align: center;                                                                                                                                                                                                                                            
-    background-color: #e6f4ea;                                                                                                                                                                                                                                     
-    color: #146c2e;                                                                                                                                                                                                                                                
-    border-radius: 16px;                                                                                                                                                                                                                                           
-    padding: 12px 10px;                                                                                                                                                                                                                                            
-    font-size: 40px;                                                                                                                                                                                                                                               
-    font-weight: bold;                                                                                                                                                                                                                                             
-    -webkit-box-flex: 0;                                                                                                                                                                                                                                           
-    -webkit-flex-shrink: 0;                                                                                                                                                                                                                                        
-    flex-shrink: 0;                                                                                                                                                                                                                                                
-  }                                                                                                                                                                                                                                                                
-  .mins .small {                                                                                                                                                                                                                                                   
-    display: block;                                                                                                                                                                                                                                                
-    font-size: 16px;                                                                                                                                                                                                                                               
-    font-weight: normal;                                                                                                                                                                                                                                           
-    color: #1e8e3e;                                                                                                                                                                                                                                                
-    margin-top: 4px;                                                                                                                                                                                                                                               
-  }                                                                                                                                                                                                                                                                
-  .row\.soon .mins { background-color: #fbe6dc; color: #e2622a; }                                                                                                                                                                                                  
-  .row\.soon .mins .small { color: #e2622a; }                                                                                                                                                                                                                      
-  footer {                                                                                                                                                                                                                                                         
-    height: 50px;                                                                                                                                                                                                                                                  
-    text-align: center;                                                                                                                                                                                                                                            
-    color: #6b7d72;                                                                                                                                                                                                                                                
-    font-size: 18px;                                                                                                                                                                                                                                               
-    padding-top: 10px;                                                                                                                                                                                                                                             
-  }                                                                                                                                                                                                                                                                
-  .msg {                                                                                                                                                                                                                                                           
-    text-align: center;                                                                                                                                                                                                                                            
-    color: #6b7d72;                                                                                                                                                                                                                                                
-    font-size: 30px;                                                                                                                                                                                                                                               
-    padding: 80px 100px;                                                                                                                                                                                                                                           
-  }                                                                                                                                                                                                                                                                
-</style>                                                                                                                                                                                                                                                          
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mannila 1 – Bussit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1e8e3e;
+    --green-dark: #146c2e;
+    --green-light: #e6f4ea;
+    --white: #ffffff;
+    --ink: #1c2b22;
+    --muted: #6b7d72;
+    --alert: #e2622a;
+    --card-shadow: 0 6px 18px rgba(30, 80, 45, 0.10);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #cfe8d6;
+    overflow: hidden;
+    font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+  }
 
-<style id="xd230-fixed-layout">
-html, body {
-  width: 1345px !important;
-  height: 979px !important;
-  min-width: 1345px !important;
-  min-height: 979px !important;
-  max-width: 1345px !important;
-  max-height: 979px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-}
-#stage {
-  width: 1345px !important;
-  height: 979px !important;
-  min-width: 1345px !important;
-  min-height: 979px !important;
-  max-width: 1345px !important;
-  max-height: 979px !important;
-  margin: 0 !important;
-  overflow: hidden !important;
-}
-header {
-  height: 150px !important;
-  flex: 0 0 150px !important;
-  padding: 0 46px !important;
-}
-.bus-icon-wrap {
-  width: 68px !important;
-  height: 68px !important;
-  margin-right: 22px !important;
-}
-.brand-text h1 { font-size: 43px !important; }
-.brand-text p { font-size: 18px !important; }
-.clock-block .time { font-size: 42px !important; }
-main {
-  width: 100% !important;
-  height: 829px !important;
-  min-height: 0 !important;
-  padding: 28px 46px 24px 46px !important;
-  overflow: hidden !important;
-}
-#list {
-  width: 100% !important;
-  height: auto !important;
-}
-.row {
-  width: 100% !important;
-  min-height: 93px !important;
-  height: 93px !important;
-  margin-bottom: 10px !important;
-}
-.badge {
-  width: 92px !important;
-  min-width: 92px !important;
-  font-size: 30px !important;
-}
-.dest {
-  font-size: 30px !important;
-}
-.dest .sub {
-  font-size: 17px !important;
-}
-.clocktime {
-  font-size: 29px !important;
-  width: 110px !important;
-}
-.mins {
-  font-size: 34px !important;
-  width: 145px !important;
-}
-footer {
-  height: 48px !important;
-  flex: 0 0 48px !important;
-}
+  /* Koko näkymä lukitaan tarkalleen 1920x1080-mittoihin ja skaalataan
+     tarvittaessa niin, ettei sisältö KOSKAAN vuoda yli tai leikkaudu. */
+  #stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+    transform-origin: top left;
+    background: linear-gradient(180deg, #f5faf6 0%, #eaf6ee 100%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  header {
+    flex: 0 0 190px;
+    background: linear-gradient(120deg, var(--green) 0%, var(--green-dark) 100%);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 64px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .bus-icon {
+    width: 84px;
+    height: 84px;
+    flex-shrink: 0;
+  }
+  .brand-text h1 {
+    margin: 0;
+    font-size: 58px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+  }
+  .brand-text p {
+    margin: 4px 0 0;
+    font-size: 24px;
+    font-weight: 500;
+    color: #d7f0dd;
+  }
+  .clock-block {
+    text-align: right;
+  }
+  #clock {
+    font-size: 64px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  #date {
+    margin-top: 6px;
+    font-size: 22px;
+    font-weight: 500;
+    color: #d7f0dd;
+  }
+
+  main {
+    flex: 1;
+    padding: 40px 64px 30px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  #list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+  }
+
+  .row {
+    flex: 1 1 0;
+    min-height: 0;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    display: grid;
+    grid-template-columns: 130px 1fr 220px 260px;
+    align-items: center;
+    padding: 0 40px;
+    gap: 30px;
+  }
+
+  .badge {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: var(--green);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: 800;
+    box-shadow: 0 4px 10px rgba(30,142,62,0.35);
+  }
+  .row.soon .badge { background: var(--alert); box-shadow: 0 4px 10px rgba(226,98,42,0.35); }
+
+  .dest {
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dest .sub {
+    display: block;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .clocktime {
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--muted);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mins {
+    justify-self: end;
+    background: var(--green-light);
+    color: var(--green-dark);
+    border-radius: 16px;
+    padding: 14px 26px;
+    font-size: 44px;
+    font-weight: 800;
+    min-width: 190px;
+    text-align: center;
+    line-height: 1;
+  }
+  .mins small {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 4px;
+    color: var(--green);
+  }
+  .row.soon .mins {
+    background: #fbe6dc;
+    color: var(--alert);
+  }
+  .row.soon .mins small { color: var(--alert); }
+
+  footer {
+    flex: 0 0 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  #msg {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 34px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.6;
+    padding: 0 120px;
+  }
+  #msg code {
+    background: var(--green-light);
+    color: var(--green-dark);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.75em;
+  }
 </style>
+</head>
+<body>
+<div id="stage">
+  <header>
+    <div class="brand">
+      <svg class="bus-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="10" width="56" height="34" rx="8" fill="#ffffff"/>
+        <rect x="9" y="15" width="12" height="10" rx="2" fill="#1e8e3e"/>
+        <rect x="24" y="15" width="12" height="10" rx="2" fill="#1e8e3e"/>
+        <rect x="39" y="15" width="12" height="10" rx="2" fill="#1e8e3e"/>
+        <rect x="4" y="30" width="56" height="6" fill="#1e8e3e"/>
+        <circle cx="16" cy="50" r="7" fill="#1c2b22"/>
+        <circle cx="48" cy="50" r="7" fill="#1c2b22"/>
+        <circle cx="16" cy="50" r="3" fill="#ffffff"/>
+        <circle cx="48" cy="50" r="3" fill="#ffffff"/>
+      </svg>
+      <div class="brand-text">
+        <h1 id="stop-name">Mannila 1</h1>
+        <p>Tulevat lähdöt</p>
+      </div>
+    </div>
+    <div class="clock-block">
+      <div id="clock">--:--:--</div>
+      <div id="date">--</div>
+    </div>
+  </header>
 
-</head>                                                                                                                                                                                                                                                           
-<body>                                                                                                                                                                                                                                                            
-<div id="stage">                                                                                                                                                                                                                                                  
-  <header>                                                                                                                                                                                                                                                        
-    <div class="brand">                                                                                                                                                                                                                                           
-      <div class="bus-icon-wrap">                                                                                                                                                                                                                                 
-        <svg width="84" height="84" viewBox="0 0 64 64" xmlns="http\://www\.w3.org/2000/svg">                                                                                                                                                                     
-          <rect x="4" y="10" width="56" height="34" rx="8" fill="#ffffff"></rect>                                                                                                                                                                                
-          <rect x="9" y="15" width="12" height="10" rx="2" fill="#1e8e3e"></rect>                                                                                                                                                                                
-          <rect x="24" y="15" width="12" height="10" rx="2" fill="#1e8e3e"></rect>                                                                                                                                                                               
-          <rect x="39" y="15" width="12" height="10" rx="2" fill="#1e8e3e"></rect>                                                                                                                                                                               
-          <rect x="4" y="30" width="56" height="6" fill="#1e8e3e"></rect>                                                                                                                                                                                        
-          <circle cx="16" cy="50" r="7" fill="#1c2b22"></circle>                                                                                                                                                                                                 
-          <circle cx="48" cy="50" r="7" fill="#1c2b22"></circle>                                                                                                                                                                                                 
-          <circle cx="16" cy="50" r="3" fill="#ffffff"></circle>                                                                                                                                                                                                 
-          <circle cx="48" cy="50" r="3" fill="#ffffff"></circle>                                                                                                                                                                                                 
-        </svg>                                                                                                                                                                                                                                                    
-      </div>                                                                                                                                                                                                                                                      
-      <div class="brand-text">                                                                                                                                                                                                                                    
-        <h1 id="stop-name">Mannila 1</h1>                                                                                                                                                                                                                        
-        <p>Tulevat lähdöt</p>                                                                                                                                                                                                                                    
-      </div>                                                                                                                                                                                                                                                      
-    </div>                                                                                                                                                                                                                                                        
-    <div class="clock-block">                                                                                                                                                                                                                                     
-      <div id="clock">--:--:--</div>                                                                                                                                                                                                                             
-      <div id="date">--</div>                                                                                                                                                                                                                                    
-    </div>                                                                                                                                                                                                                                                        
-  </header>                                                                                                                                                                                                                                                       
-  <main>                                                                                                                                                                                                                                                          
-    <div id="list"></div>                                                                                                                                                                                                                                        
-  </main>                                                                                                                                                                                                                                                         
-  <footer id="status">Päivitetty --:--:--</footer>                                                                                                                                                                                                               
-</div>                                                                                                                                                                                                                                                            
-<br>                                                                                                                                                                                                                                                               
-<script type="text/javascript">                                                                                                                                                                                                                                   
-/* ============ ASETUKSET ============ */                                                                                                                                                                                                                        
-var CONFIG = {                                                                                                                                                                                                                                                     
-  endpoint: "https\://api.digitransit.fi/routing/v2/waltti/gtfs/v1",                                                                                                                                                                                               
-  apiKey: "880a33a882924bb7aefc9b9f0c66dab4",                                                                                                                                                                                                                      
-  stopId: "LINKKI:143718",                                                                                                                                                                                                                                         
-  departures: 6,                                                                                                                                                                                                                                                   
-  refreshMs: 60000,                                                                                                                                                                                                                                                
-  clockMs: 1000                                                                                                                                                                                                                                                    
-};                                                                                                                                                                                                                                                                 
-/* ==================================== */                                                                                                                                                                                                                       
-<br>                                                                                                                                                                                                                                                               
-var WEEKDAYS = ["sunnuntai", "maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai"];                                                                                                                                                           
-<br>                                                                                                                                                                                                                                                               
-function pad(n) {                                                                                                                                                                                                                                                  
-  n = parseInt(n, 10);                                                                                                                                                                                                                                             
-  if (n < 10) { return "0" + n; }                                                                                                                                                                                                                                  
-  return "" + n;                                                                                                                                                                                                                                                   
-}                                                                                                                                                                                                                                                                  
-<br>                                                                                                                                                                                                                                                               
-function updateClock() {                                                                                                                                                                                                                                           
-  var now = new Date();                                                                                                                                                                                                                                            
-  var h = pad(now\.getHours());                                                                                                                                                                                                                                    
-  var m = pad(now\.getMinutes());                                                                                                                                                                                                                                  
-  var s = pad(now\.getSeconds());                                                                                                                                                                                                                                  
-  document.getElementById("clock").innerHTML = h + ":" + m + ":" + s;                                                                                                                                                                                              
-  var dateStr = WEEKDAYS[now\.getDay()] + " " + pad(now\.getDate()) + "." + pad(now\.getMonth() + 1) + "." + now\.getFullYear();                                                                                                                                   
-  document.getElementById("date").innerHTML = dateStr;                                                                                                                                                                                                             
-}                                                                                                                                                                                                                                                                  
-<br>                                                                                                                                                                                                                                                               
-function renderMessage(html) {                                                                                                                                                                                                                                     
-  document.getElementById("list").innerHTML = '<div class="msg">' + html + '</div>';                                                                                                                                                                             
-}                                                                                                                                                                                                                                                                  
-<br>                                                                                                                                                                                                                                                               
-function buildQueryBody() {                                                                                                                                                                                                                                        
-  var q = "query Stop($id: String!, $n: Int!) { stop(id: $id) { name stoptimesWithoutPatterns(numberOfDepartures: $n, omitNonPickups: true) { realtime realtimeState serviceDay scheduledDeparture realtimeDeparture headsign trip { route { shortName } } } } }"; 
-  return JSON.stringify({                                                                                                                                                                                                                                          
-    query: q,                                                                                                                                                                                                                                                      
-    variables: { id: CONFIG.stopId, n: CONFIG.departures }                                                                                                                                                                                                         
-  });                                                                                                                                                                                                                                                              
-}                                                                                                                                                                                                                                                                  
-<br>                                                                                                                                                                                                                                                               
-function renderDepartures(stop) {                                                                                                                                                                                                                                  
-  if (!stop) {                                                                                                                                                                                                                                                     
-    renderMessage("Pysäkkiä ei löytynyt.<br>Tarkista stopId asetuksista.");                                                                                                                                                                                       
-    return;                                                                                                                                                                                                                                                        
-  }                                                                                                                                                                                                                                                                
-  document.getElementById("stop-name").innerHTML = stop.name || "Mannila 1";                                                                                                                                                                                     
-<br>                                                                                                                                                                                                                                                               
-  var now = Math.floor(new Date().getTime() / 1000);                                                                                                                                                                                                               
-  var items = stop.stoptimesWithoutPatterns || [];                                                                                                                                                                                                               
-  var rows = [];                                                                                                                                                                                                                                                   
-  var i;                                                                                                                                                                                                                                                           
-<br>                                                                                                                                                                                                                                                               
-  for (i = 0; i < items.length; i++) {                                                                                                                                                                                                                             
-    var st = items[i];                                                                                                                                                                                                                                             
-    var dep = st.serviceDay + (st.realtime ? st.realtimeDeparture : st.scheduledDeparture);                                                                                                                                                                        
-    if (dep >= now - 30) {                                                                                                                                                                                                                                         
-      rows.push({ st: st, epoch: dep });                                                                                                                                                                                                                           
-    }                                                                                                                                                                                                                                                              
-  }                                                                                                                                                                                                                                                                
-<br>                                                                                                                                                                                                                                                               
-  rows.sort(function (a, b) { return a.epoch - b.epoch; });                                                                                                                                                                                                        
-  rows = rows.slice(0, CONFIG.departures);                                                                                                                                                                                                                         
-<br>                                                                                                                                                                                                                                                               
-  if (rows.length === 0) {                                                                                                                                                                                                                                         
-    renderMessage("Ei tulevia lähtöjä juuri nyt.");                                                                                                                                                                                                                
-    return;                                                                                                                                                                                                                                                        
-  }                                                                                                                                                                                                                                                                
-<br>                                                                                                                                                                                                                                                               
-  var html = "";                                                                                                                                                                                                                                                   
-  for (i = 0; i < rows.length; i++) {                                                                                                                                                                                                                              
-    var r = rows[i];                                                                                                                                                                                                                                               
-    var s2 = r.st;                                                                                                                                                                                                                                                 
-    var d = new Date(r.epoch * 1000);                                                                                                                                                                                                                             
-    var clockStr = pad(d.getHours()) + ":" + pad(d.getMinutes());                                                                                                                                                                                                  
-    var minsLeft = Math.max(0, Math.round((r.epoch - now) / 60));                                                                                                                                                                                                  
-    var rowClass = (minsLeft <= 2) ? "row soon" : "row";                                                                                                                                                                                                           
-    var line = "?";                                                                                                                                                                                                                                                
-    if (s2.trip && s2.trip.route && s2.trip.route.shortName) {                                                                                                                                                                                                     
-      line = s2.trip.route.shortName;                                                                                                                                                                                                                              
-    }                                                                                                                                                                                                                                                              
-    var dest = s2.headsign || "";                                                                                                                                                                                                                                
-    var minsLabel;                                                                                                                                                                                                                                                 
-    if (minsLeft === 0) {                                                                                                                                                                                                                                          
-      minsLabel = "NYT<span class=\\"small\\">lähtee</span>";                                                                                                                                                                                                    
-    } else {                                                                                                                                                                                                                                                       
-      minsLabel = minsLeft + "<span class=\\"small\\">min</span>";                                                                                                                                                                                               
-    }                                                                                                                                                                                                                                                              
-    html += '<div class="' + rowClass + '">' +                                                                                                                                                                                                                    
-              '<div class="badge">' + line + '</div>' +                                                                                                                                                                                                          
-              '<div class="dest">' + dest + '<span class="sub">Linja ' + line + '</span></div>' +                                                                                                                                                              
-              '<div class="clocktime">' + clockStr + '</div>' +                                                                                                                                                                                                  
-              '<div class="mins">' + minsLabel + '</div>' +                                                                                                                                                                                                      
-            '</div>';                                                                                                                                                                                                                                             
-  }                                                                                                                                                                                                                                                                
-  document.getElementById("list").innerHTML = html;                                                                                                                                                                                                                
-}                                                                                                                                                                                                                                                                  
-<br>                                                                                                                                                                                                                                                               
-function loadData() {                                                                                                                                                                                                                                              
-  if (!CONFIG.apiKey || CONFIG.apiKey.indexOf("SYOTA\_") === 0) {                                                                                                                                                                                                
-    renderMessage("Digitransit-avain puuttuu.<br>Lisää se CONFIG.apiKey-kohtaan tiedoston alussa.");                                                                                                                                                              
-    return;                                                                                                                                                                                                                                                        
-  }                                                                                                                                                                                                                                                                
-<br>                                                                                                                                                                                                                                                               
-  var xhr = new XMLHttpRequest();                                                                                                                                                                                                                                  
-  try {                                                                                                                                                                                                                                                            
-    xhr.open("POST", CONFIG.endpoint, true);                                                                                                                                                                                                                       
-    xhr.setRequestHeader("Content-Type", "application/json");                                                                                                                                                                                                      
-    xhr.setRequestHeader("digitransit-subscription-key", CONFIG.apiKey);                                                                                                                                                                                           
-  } catch (e) {                                                                                                                                                                                                                                                    
-    renderMessage("Selain ei tukenut pyynnön alustusta: " + e.toString());                                                                                                                                                                                         
-    return;                                                                                                                                                                                                                                                        
-  }                                                                                                                                                                                                                                                                
-<br>                                                                                                                                                                                                                                                               
-  xhr.onreadystatechange = function () {                                                                                                                                                                                                                           
-    if (xhr.readyState === 4) {                                                                                                                                                                                                                                    
-      if (xhr.status >= 200 && xhr.status < 300) {                                                                                                                                                                                                                 
-        try {                                                                                                                                                                                                                                                      
-          var json = JSON.parse(xhr.responseText);                                                                                                                                                                                                                 
-          if (json.errors && json.errors.length > 0) {                                                                                                                                                                                                             
-            renderMessage("Haku epäonnistui: " + json.errors[0].message);                                                                                                                                                                                          
-            return;                                                                                                                                                                                                                                                
-          }                                                                                                                                                                                                                                                        
-          renderDepartures(json.data ? json.data.stop : null);                                                                                                                                                                                                     
-          document.getElementById("status").innerHTML = "Päivitetty " + document.getElementById("clock").innerHTML;                                                                                                                                                
-        } catch (parseErr) {                                                                                                                                                                                                                                       
-          renderMessage("Virhe vastauksen käsittelyssä.");                                                                                                                                                                                                         
-        }                                                                                                                                                                                                                                                          
-      } else {                                                                                                                                                                                                                                                     
-        renderMessage("Tietojen haku epäonnistui (HTTP " + xhr.status + ").<br>Yritetään uudelleen automaattisesti.");                                                                                                                                            
-        document.getElementById("status").innerHTML = "Virhe haussa";                                                                                                                                                                                              
-      }                                                                                                                                                                                                                                                            
-    }                                                                                                                                                                                                                                                              
-  };                                                                                                                                                                                                                                                               
-<br>                                                                                                                                                                                                                                                               
-  xhr.send(buildQueryBody());                                                                                                                                                                                                                                      
-}                                                                                                                                                                                                                                                                  
-<br>                                                                                                                                                                                                                                                               
-updateClock();                                                                                                                                                                                                                                                     
-setInterval(updateClock, CONFIG.clockMs);                                                                                                                                                                                                                          
-<br>                                                                                                                                                                                                                                                               
-loadData();                                                                                                                                                                                                                                                        
-setInterval(loadData, CONFIG.refreshMs);                                                                                                                                                                                                                           
-</script>                                                                                                                                                                                                                                                         
-</body>                                                                                                                                                                                                                                                           
-</html>                                                                                                                                                                                                                                                           
+  <main>
+    <div id="list"></div>
+  </main>
+
+  <footer id="status">Päivitetty --:--:--</footer>
+</div>
+
+<script>
+/* ============ ASETUKSET ============ */
+const CONFIG = {
+  ENDPOINT: "https://api.digitransit.fi/routing/v2/waltti/gtfs/v1",
+  // Liitä oma Digitransit-avaimesi tähän
+  API_KEY: "880a33a882924bb7aefc9b9f0c66dab4",
+  STOP_ID: "LINKKI:143718",
+  // Näytettävien lähtöjen määrä. Rivit mitoitetaan aina niin, että
+  // KAIKKI mahtuvat näytölle ilman ylivuotoa (max. suositus 7).
+  DEPARTURES: 6,
+  REFRESH_MS: 60 * 1000,
+  CLOCK_MS: 1000
+};
+/* ==================================== */
+
+const listEl = document.getElementById("list");
+const statusEl = document.getElementById("status");
+const clockEl = document.getElementById("clock");
+const dateEl = document.getElementById("date");
+const stopNameEl = document.getElementById("stop-name");
+const stage = document.getElementById("stage");
+
+const WEEKDAYS = ["sunnuntai","maanantai","tiistai","keskiviikko","torstai","perjantai","lauantai"];
+
+function pad(n) { return n.toString().padStart(2, "0"); }
+
+function updateClock() {
+  const now = new Date();
+  clockEl.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  dateEl.textContent = `${WEEKDAYS[now.getDay()]} ${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()}`;
+}
+
+// Skaalaa #stage aina näytön kokoon niin, ettei mikään koskaan mene yli reunojen.
+function fitStage() {
+  const sx = window.innerWidth / 1920;
+  const sy = window.innerHeight / 1080;
+  const scale = Math.min(sx, sy);
+  stage.style.transform = `scale(${scale})`;
+  stage.style.left = ((window.innerWidth - 1920 * scale) / 2) + "px";
+  stage.style.top = ((window.innerHeight - 1080 * scale) / 2) + "px";
+}
+window.addEventListener("resize", fitStage);
+fitStage();
+
+function buildQuery() {
+  return {
+    query: `
+      query Stop($id: String!, $n: Int!) {
+        stop(id: $id) {
+          name
+          stoptimesWithoutPatterns(numberOfDepartures: $n, omitNonPickups: true) {
+            realtime
+            realtimeState
+            serviceDay
+            scheduledDeparture
+            realtimeDeparture
+            headsign
+            trip {
+              route {
+                shortName
+              }
+            }
+          }
+        }
+      }
+    `,
+    variables: { id: CONFIG.STOP_ID, n: CONFIG.DEPARTURES }
+  };
+}
+
+function renderMessage(text) {
+  listEl.innerHTML = `<div id="msg">${text}</div>`;
+}
+
+function renderDepartures(stop) {
+  if (!stop) {
+    renderMessage("Pysäkkiä ei löytynyt.<br>Tarkista <code>STOP_ID</code> tiedoston alusta.");
+    return;
+  }
+  stopNameEl.textContent = stop.name || "Mannila 1";
+
+  const now = Math.floor(Date.now() / 1000);
+  const rows = (stop.stoptimesWithoutPatterns || [])
+    .map(st => ({ ...st, epoch: st.serviceDay + (st.realtime ? st.realtimeDeparture : st.scheduledDeparture) }))
+    .filter(st => st.epoch >= now - 30)
+    .sort((a, b) => a.epoch - b.epoch)
+    .slice(0, CONFIG.DEPARTURES);
+
+  if (rows.length === 0) {
+    renderMessage("Ei tulevia lähtöjä juuri nyt.");
+    return;
+  }
+
+  listEl.innerHTML = rows.map(st => {
+    const d = new Date(st.epoch * 1000);
+    const clockStr = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    const minsLeft = Math.max(0, Math.round((st.epoch - now) / 60));
+    const cls = minsLeft <= 2 ? "soon" : "";
+    const line = (st.trip && st.trip.route && st.trip.route.shortName) || "?";
+    const dest = st.headsign || "";
+    const minsLabel = minsLeft === 0
+      ? `NYT<small>lähtee</small>`
+      : `${minsLeft}<small>min</small>`;
+    return `
+      <div class="row ${cls}">
+        <div class="badge">${line}</div>
+        <div class="dest">${dest}<span class="sub">Linja ${line}</span></div>
+        <div class="clocktime">${clockStr}</div>
+        <div class="mins">${minsLabel}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+async function loadData() {
+  if (!CONFIG.API_KEY || CONFIG.API_KEY.startsWith("SYOTA_")) {
+    renderMessage(
+      "Digitransit-avain puuttuu.<br>Lisää se muuttujaan <code>API_KEY</code> tiedoston alussa."
+    );
+    return;
+  }
+  try {
+    const res = await fetch(CONFIG.ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "digitransit-subscription-key": CONFIG.API_KEY
+      },
+      body: JSON.stringify(buildQuery())
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const json = await res.json();
+    if (json.errors && json.errors.length) {
+      throw new Error(json.errors[0].message || "GraphQL-virhe");
+    }
+
+    renderDepartures(json.data && json.data.stop);
+    statusEl.textContent = "Päivitetty " + new Date().toLocaleTimeString("fi-FI");
+  } catch (err) {
+    console.error(err);
+    renderMessage("Tietojen haku epäonnistui.<br>Yritetään uudelleen automaattisesti.");
+    statusEl.textContent = "Virhe haussa " + new Date().toLocaleTimeString("fi-FI");
+  }
+}
+
+updateClock();
+setInterval(updateClock, CONFIG.CLOCK_MS);
+
+loadData();
+setInterval(loadData, CONFIG.REFRESH_MS);
+</script>
+</body>
+</html>
