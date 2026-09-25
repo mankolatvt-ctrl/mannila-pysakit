@@ -19,8 +19,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 1920px;
-    height: 1080px;
+    width: 1345px;
+    height: 980px;
     -webkit-transform-origin: top left;
     transform-origin: top left;
     background-color: #eaf6ee;
@@ -295,6 +295,8 @@ var CONFIG = {
 };
 /* ==================================== */
 
+var STAGE_WIDTH = 1345;
+var STAGE_HEIGHT = 980;
 var WEEKDAYS = ["sunnuntai", "maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai"];
 var attemptCount = 0;
 
@@ -304,20 +306,19 @@ function pad(n) {
   return "" + n;
 }
 
+// Venyttää näkymän tarkalleen ikkunan/näytön kokoiseksi (X ja Y erikseen),
+// jotta ruudulle EI jää mustia palkkeja edes jos kuvasuhde ei ole 16:9.
 function fitStage() {
   var stageEl = document.getElementById("stage");
   var ww = window.innerWidth;
   var wh = window.innerHeight;
-  var sx = ww / 1920;
-  var sy = wh / 1080;
-  var scale = sx < sy ? sx : sy;
-  var offsetX = (ww - 1920 * scale) / 2;
-  var offsetY = (wh - 1080 * scale) / 2;
+  var sx = ww / STAGE_WIDTH;
+  var sy = wh / STAGE_HEIGHT;
 
-  stageEl.style.webkitTransform = "scale(" + scale + ")";
-  stageEl.style.transform = "scale(" + scale + ")";
-  stageEl.style.left = offsetX + "px";
-  stageEl.style.top = offsetY + "px";
+  stageEl.style.webkitTransform = "scale(" + sx + ", " + sy + ")";
+  stageEl.style.transform = "scale(" + sx + ", " + sy + ")";
+  stageEl.style.left = "0px";
+  stageEl.style.top = "0px";
 }
 
 if (window.addEventListener) {
