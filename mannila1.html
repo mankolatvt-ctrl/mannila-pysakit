@@ -203,6 +203,7 @@
     margin-top: 4px;
   }
   .row.soon .mins { background-color: #fbe6dc; color: #e2622a; }
+  .mins.hm { font-size: 28px; }
   .row.soon .mins .small { color: #e2622a; }
   footer {
     height: 40px;
@@ -377,8 +378,14 @@ function renderDepartures(stop) {
     }
     var dest = s2.headsign || "";
     var minsLabel;
+    var minsExtraClass = "";
     if (minsLeft === 0) {
       minsLabel = "NYT<span class=\"small\">lähtee</span>";
+    } else if (minsLeft >= 60) {
+      var hrs = Math.floor(minsLeft / 60);
+      var remMins = minsLeft % 60;
+      minsExtraClass = " hm";
+      minsLabel = hrs + "h " + remMins + "min";
     } else {
       minsLabel = minsLeft + "<span class=\"small\">min</span>";
     }
@@ -386,7 +393,7 @@ function renderDepartures(stop) {
               '<div class="badge">' + line + '</div>' +
               '<div class="dest">' + dest + '<span class="sub">Linja ' + line + '</span></div>' +
               '<div class="clocktime">' + clockStr + '</div>' +
-              '<div class="mins">' + minsLabel + '</div>' +
+              '<div class="mins' + minsExtraClass + '">' + minsLabel + '</div>' +
             '</div>';
   }
   document.getElementById("list").innerHTML = html;
