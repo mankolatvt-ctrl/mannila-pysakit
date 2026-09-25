@@ -230,22 +230,6 @@
     color: #6b7d72;
     font-family: "Courier New", monospace;
   }
-  /* Pysyvä diagnostiikkarivi ruudun alalaidassa */
-  #debugbar {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #12291a;
-    color: #b7e4c7;
-    font-family: "Courier New", monospace;
-    font-size: 15px;
-    padding: 6px 20px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  #debugbar.err { background-color: #4a1710; color: #ffd0c4; }
 </style>
 </head>
 <body>
@@ -279,7 +263,6 @@
     <div id="list"></div>
   </main>
   <footer id="status">Päivitetty --:--:--</footer>
-  <div id="debugbar">Diagnostiikka: odotetaan ensimmäistä hakua...</div>
 </div>
 
 <script type="text/javascript">
@@ -298,7 +281,6 @@ var CONFIG = {
 var STAGE_WIDTH = 1345;
 var STAGE_HEIGHT = 980;
 var WEEKDAYS = ["sunnuntai", "maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai"];
-var attemptCount = 0;
 
 function pad(n) {
   n = parseInt(n, 10);
@@ -337,12 +319,6 @@ function updateClock() {
   document.getElementById("clock").innerHTML = nowClockStr();
   var dateStr = WEEKDAYS[now.getDay()] + " " + pad(now.getDate()) + "." + pad(now.getMonth() + 1) + "." + now.getFullYear();
   document.getElementById("date").innerHTML = dateStr;
-}
-
-function setDebug(text, isError) {
-  var bar = document.getElementById("debugbar");
-  bar.innerHTML = text;
-  bar.className = isError ? "err" : "";
 }
 
 function renderMessage(html, isError, detail) {
@@ -417,17 +393,10 @@ function renderDepartures(stop) {
 }
 
 function loadData() {
-  attemptCount = attemptCount + 1;
-  var startedAt = new Date().getTime();
-  var attemptLabel = "#" + attemptCount + " klo " + nowClockStr();
-
   if (!CONFIG.apiKey || CONFIG.apiKey.indexOf("SYOTA_") === 0) {
     renderMessage("Digitransit-avain puuttuu.", true, "Lisää CONFIG.apiKey tiedoston alkuun.");
-    setDebug(attemptLabel + " -- EI AVAINTA asetettu", true);
     return;
   }
-
-  setDebug(attemptLabel + " -- lähetetään pyyntö osoitteeseen: " + CONFIG.endpoint, false);
 
   var xhr = new XMLHttpRequest();
   var finished = false;
@@ -438,7 +407,6 @@ function loadData() {
     xhr.setRequestHeader("digitransit-subscription-key", CONFIG.apiKey);
     xhr.timeout = CONFIG.timeoutMs;
   } catch (openErr) {
-    setDebug(attemptLabel + " -- VIRHE pyynnön alustuksessa: " + openErr.toString(), true);
     renderMessage("Selain ei pystynyt alustamaan verkkopyyntöä.", true, openErr.toString());
     return;
   }
@@ -446,17 +414,9 @@ function loadData() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && !finished) {
       finished = true;
-      var elapsed = new Date().getTime() - startedAt;
 
       if (xhr.status === 0) {
-        // status 0 readyState 4 = verkko-/CORS-/TLS-virhe, ei koskaan tavoittanut palvelinta kunnolla
-        setDebug(attemptLabel + " -- EI YHTEYTTÄ (status 0, " + elapsed + " ms). Syy: TLS/CORS/palomuuri/DNS.", true);
-        renderMessage(
-          "EI YHTEYTTÄ PALVELIMEEN",
-          true,
-          "Kohde: " + CONFIG.endpoint + " | HTTP-tila: 0 | Kesto: " + elapsed + " ms | " +
-          "Mahdollinen syy: laitteen vanha TLS-tuki, CORS-esitarkistus epäonnistui, tai palomuuri estää yhteyden."
-        );
+        renderMessage("Ei yhteyttä palvelimeen.", true, "Yritetään uudelleen automaattisesti.");
         return;
       }
 
@@ -464,31 +424,18 @@ function loadData() {
         try {
           var json = JSON.parse(xhr.responseText);
           if (json.errors && json.errors.length > 0) {
-            setDebug(attemptLabel + " -- GraphQL-virhe: " + json.errors[0].message, true);
             renderMessage("Palvelin palautti virheen.", true, json.errors[0].message);
             return;
           }
           renderDepartures(json.data ? json.data.stop : null);
           document.getElementById("status").innerHTML = "Päivitetty " + nowClockStr();
-          setDebug(attemptLabel + " -- OK (HTTP 200, " + elapsed + " ms)", false);
         } catch (parseErr) {
-          setDebug(attemptLabel + " -- JSON-jäsennysvirhe: " + parseErr.toString(), true);
-          renderMessage(
-            "Virhe vastauksen käsittelyssä.",
-            true,
-            "Raaka vastaus (alku): " + xhr.responseText.substring(0, 150)
-          );
+          renderMessage("Virhe vastauksen käsittelyssä.", true);
         }
       } else if (xhr.status === 401 || xhr.status === 403) {
-        setDebug(attemptLabel + " -- VÄÄRÄ AVAIN (HTTP " + xhr.status + ")", true);
-        renderMessage("API-avain hylätty.", true, "HTTP " + xhr.status + " -- tarkista CONFIG.apiKey.");
+        renderMessage("API-avain hylätty.", true, "Tarkista CONFIG.apiKey.");
       } else {
-        setDebug(attemptLabel + " -- HTTP-virhe " + xhr.status + " (" + elapsed + " ms)", true);
-        renderMessage(
-          "Tietojen haku epäonnistui.",
-          true,
-          "HTTP " + xhr.status + " " + xhr.statusText + " | Kesto: " + elapsed + " ms"
-        );
+        renderMessage("Tietojen haku epäonnistui.", true, "HTTP " + xhr.status);
       }
     }
   };
@@ -496,31 +443,18 @@ function loadData() {
   xhr.onerror = function () {
     if (finished) { return; }
     finished = true;
-    var elapsed = new Date().getTime() - startedAt;
-    setDebug(attemptLabel + " -- VERKKOVIRHE (onerror, " + elapsed + " ms)", true);
-    renderMessage(
-      "VERKKOVIRHE",
-      true,
-      "Selain ei saanut yhteyttä osoitteeseen " + CONFIG.endpoint + ". " +
-      "Tarkista laitteen internet-yhteys ja että osoite ei ole palomuurin/sisältösuodattimen estämä."
-    );
+    renderMessage("Verkkovirhe.", true, "Yritetään uudelleen automaattisesti.");
   };
 
   xhr.ontimeout = function () {
     if (finished) { return; }
     finished = true;
-    setDebug(attemptLabel + " -- AIKAKATKAISU (" + CONFIG.timeoutMs + " ms sisällä ei vastausta)", true);
-    renderMessage(
-      "AIKAKATKAISU",
-      true,
-      "Palvelin ei vastannut " + (CONFIG.timeoutMs / 1000) + " sekunnissa. Yritetään uudelleen automaattisesti."
-    );
+    renderMessage("Aikakatkaisu.", true, "Yritetään uudelleen automaattisesti.");
   };
 
   try {
     xhr.send(buildQueryBody());
   } catch (sendErr) {
-    setDebug(attemptLabel + " -- VIRHE lähetyksessä: " + sendErr.toString(), true);
     renderMessage("Pyynnön lähetys epäonnistui.", true, sendErr.toString());
   }
 }
