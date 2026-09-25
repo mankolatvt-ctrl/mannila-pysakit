@@ -16,8 +16,13 @@
     font-family: Arial, Helvetica, sans-serif;
   }
   #stage {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 1920px;
     height: 1080px;
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
     background-color: #eaf6ee;
     display: -webkit-box;
     display: -webkit-flex;
@@ -299,6 +304,28 @@ function pad(n) {
   return "" + n;
 }
 
+function fitStage() {
+  var stageEl = document.getElementById("stage");
+  var ww = window.innerWidth;
+  var wh = window.innerHeight;
+  var sx = ww / 1920;
+  var sy = wh / 1080;
+  var scale = sx < sy ? sx : sy;
+  var offsetX = (ww - 1920 * scale) / 2;
+  var offsetY = (wh - 1080 * scale) / 2;
+
+  stageEl.style.webkitTransform = "scale(" + scale + ")";
+  stageEl.style.transform = "scale(" + scale + ")";
+  stageEl.style.left = offsetX + "px";
+  stageEl.style.top = offsetY + "px";
+}
+
+if (window.addEventListener) {
+  window.addEventListener("resize", fitStage, false);
+} else if (window.attachEvent) {
+  window.attachEvent("onresize", fitStage);
+}
+
 function nowClockStr() {
   var d = new Date();
   return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
@@ -497,6 +524,7 @@ function loadData() {
   }
 }
 
+fitStage();
 updateClock();
 setInterval(updateClock, CONFIG.clockMs);
 
